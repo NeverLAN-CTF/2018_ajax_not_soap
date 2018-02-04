@@ -1,0 +1,54 @@
+
+<!Doctype html>
+<html>
+<head>
+  <title>Login</title>
+  <meta charset='utf-8'/>
+  <!-- just including jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+  <body>
+    <div>
+      <form>
+        <label for="name">Username</label>
+        <input id="name" type='text' name='Name' placeholder="username"/>
+        <label for='pass'>Password</label>
+        <input id='pass' type="password" name="pass" placeholder="password"/>
+      </form>
+      <br/>
+      <span id="output"></span>
+    </div>
+    <script type="text/javascript" type="text">
+      $('#name').on('keypress',function(){
+        var that = $('#name');
+        $.ajax('webhooks/get_username.php',{
+        }).done(function(data){
+            data = data.replace(/(\r\n|\n|\r)/gm,""); // remove newlines from data
+            if(data==that.val()){
+              that.css('border', '1px solid green');
+              $('#output').html('Username is correct');
+            }else{
+              that.css('border', '');
+              $('#output').html('Username is incorrect');
+            }
+          }
+        );
+      });
+      $('#pass').on('keypress', function(){
+        var that = $('#pass');
+        $.ajax('webhooks/get_pass.php?username='+$('#name').val(),{
+        }).done(function(data){
+            data = data.replace(/(\r\n|\n|\r)/gm,""); // remove newlines from data
+            if(data==that.val()){
+              that.css('border', '1px solid green');
+              $('#output').html(data);
+            }else{
+              that.css('border', '');
+              $('#output').html('Password is incorrect');
+            }
+          }
+        );
+      });
+    </script>
+  </body>
+</html>
